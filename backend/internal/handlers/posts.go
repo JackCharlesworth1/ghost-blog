@@ -54,6 +54,7 @@ func (h *PostHandler) Create(w http.ResponseWriter, r *http.Request) {
 	// Get client IP and country
 	ipAddress := middleware.GetClientIP(r)
 	country := middleware.GetCountryFromIP(ipAddress)
+	log.Printf("Post submission - IP: %s, Country: %s", ipAddress, country)
 
 	post := &models.BlogPost{
 		Title:   req.Title,
