@@ -31,7 +31,7 @@
         <div class="post-content">
           <div class="post-header">
             <h2 class="post-title">{{ post.title }}</h2>
-            <span class="post-country">{{ post.country }}</span>
+            <span class="post-country">{{ getCountryFlag(post.country) }} {{ post.country }}</span>
           </div>
           <div class="post-body">
             <p class="post-text">{{ post.content }}</p>
@@ -131,6 +131,96 @@ const formatDate = (dateString) => {
   if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`
 
   return date.toLocaleDateString()
+}
+
+const getCountryFlag = (countryName) => {
+  // Map country names to ISO 3166-1 alpha-2 codes
+  const countryToCode = {
+    'United States': 'US',
+    'United Kingdom': 'GB',
+    'Canada': 'CA',
+    'Australia': 'AU',
+    'Germany': 'DE',
+    'France': 'FR',
+    'Italy': 'IT',
+    'Spain': 'ES',
+    'Japan': 'JP',
+    'China': 'CN',
+    'India': 'IN',
+    'Brazil': 'BR',
+    'Mexico': 'MX',
+    'Russia': 'RU',
+    'South Korea': 'KR',
+    'Netherlands': 'NL',
+    'Sweden': 'SE',
+    'Norway': 'NO',
+    'Denmark': 'DK',
+    'Finland': 'FI',
+    'Poland': 'PL',
+    'Belgium': 'BE',
+    'Austria': 'AT',
+    'Switzerland': 'CH',
+    'Ireland': 'IE',
+    'Portugal': 'PT',
+    'Greece': 'GR',
+    'Czech Republic': 'CZ',
+    'Romania': 'RO',
+    'Hungary': 'HU',
+    'New Zealand': 'NZ',
+    'Singapore': 'SG',
+    'Thailand': 'TH',
+    'Vietnam': 'VN',
+    'Philippines': 'PH',
+    'Indonesia': 'ID',
+    'Malaysia': 'MY',
+    'Turkey': 'TR',
+    'Israel': 'IL',
+    'Saudi Arabia': 'SA',
+    'United Arab Emirates': 'AE',
+    'South Africa': 'ZA',
+    'Egypt': 'EG',
+    'Argentina': 'AR',
+    'Chile': 'CL',
+    'Colombia': 'CO',
+    'Peru': 'PE',
+    'Venezuela': 'VE',
+    'Ukraine': 'UA',
+    'Bulgaria': 'BG',
+    'Croatia': 'HR',
+    'Slovakia': 'SK',
+    'Slovenia': 'SI',
+    'Lithuania': 'LT',
+    'Latvia': 'LV',
+    'Estonia': 'EE',
+    'Iceland': 'IS',
+    'Luxembourg': 'LU',
+    'Malta': 'MT',
+    'Cyprus': 'CY',
+    'Pakistan': 'PK',
+    'Bangladesh': 'BD',
+    'Sri Lanka': 'LK',
+    'Hong Kong': 'HK',
+    'Taiwan': 'TW',
+    'Local': '🏠',
+    'Unknown': '🌍'
+  }
+
+  const code = countryToCode[countryName]
+
+  // Special handling for non-country codes
+  if (code === '🏠' || code === '🌍') {
+    return code
+  }
+
+  if (!code) {
+    return '🌍' // Default globe emoji for unmapped countries
+  }
+
+  // Convert country code to flag emoji
+  // Flag emojis are created using regional indicator symbols
+  // A = 0x1F1E6, B = 0x1F1E7, ..., Z = 0x1F1FF
+  const codePoints = [...code].map(char => 0x1F1E6 + char.charCodeAt(0) - 65)
+  return String.fromCodePoint(...codePoints)
 }
 
 onMounted(() => {
