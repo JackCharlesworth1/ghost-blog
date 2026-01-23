@@ -6,6 +6,7 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -67,10 +68,18 @@ func GetCountryFromIP(ipAddress string) string {
 
 func GetClientIP(r *http.Request) string {
 	// Check X-Forwarded-For header (for proxies/load balancers)
+	// Format: "client-ip, proxy1-ip, proxy2-ip" - first IP is the original client
 	forwarded := r.Header.Get("X-Forwarded-For")
 	log.Printf("GetClientIP - X-Forwarded-For: %s", forwarded)
 	if forwarded != "" {
-		return forwarded
+		// Split by comma and get the first IP (original client)
+		ips := strings.Split(forwarded, ",")
+		if len(ips) > 0 {
+			ip := strings.TrimSpace(ips[0])
+			if ip != "" {
+				return ip
+			}
+		}
 	}
 
 	// Check X-Real-IP header
